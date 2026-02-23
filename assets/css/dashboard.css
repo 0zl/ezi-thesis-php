@@ -1,0 +1,236 @@
+:root {
+    --sidebar-w: 260px;
+    --primary: #4a86b8;
+    --primary-light: #edf4fa;
+    --bg: #f8f9fc;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    margin: 0;
+}
+
+/* ── Sidebar ── */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--sidebar-w);
+    height: 100vh;
+    background: #2c3e55;
+    color: #c8d8e8;
+    display: flex;
+    flex-direction: column;
+    transition: transform .3s;
+    z-index: 1040;
+}
+
+.sidebar .brand {
+    padding: 1.5rem 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    border-bottom: 1px solid rgba(255, 255, 255, .08);
+}
+
+.sidebar .brand-icon {
+    width: 40px;
+    height: 40px;
+    background: var(--primary);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    color: #fff;
+}
+
+.sidebar .brand span {
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: #fff;
+}
+
+.sidebar nav {
+    flex: 1;
+    padding: 1rem 0;
+    overflow-y: auto;
+}
+
+.sidebar .nav-label {
+    font-size: .7rem;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    padding: .75rem 1.25rem .35rem;
+    color: #7baed4;
+    font-weight: 600;
+}
+
+.sidebar .nav-link {
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+    padding: .6rem 1.25rem;
+    color: #c8d8e8;
+    text-decoration: none;
+    font-size: .875rem;
+    border-radius: 0;
+    transition: background .15s, color .15s;
+}
+
+.sidebar .nav-link:hover {
+    background: rgba(255, 255, 255, .06);
+    color: #fff;
+}
+
+.sidebar .nav-link.active {
+    background: var(--primary);
+    color: #fff;
+    font-weight: 600;
+}
+
+.sidebar .nav-link i {
+    font-size: 1.1rem;
+    width: 22px;
+    text-align: center;
+}
+
+/* ── Main ── */
+.main-content {
+    margin-left: var(--sidebar-w);
+    min-height: 100vh;
+}
+
+/* ── Topbar ── */
+.topbar {
+    height: 64px;
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+}
+
+.topbar .page-title {
+    font-weight: 700;
+    font-size: 1.125rem;
+    color: #1f2937;
+}
+
+.topbar .btn-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 1.35rem;
+    color: #6b7280;
+    cursor: pointer;
+}
+
+.topbar .user-info {
+    display: flex;
+    align-items: center;
+    gap: .65rem;
+}
+
+.topbar .avatar {
+    width: 36px;
+    height: 36px;
+    background: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 700;
+    font-size: .85rem;
+}
+
+.topbar .user-name {
+    font-weight: 600;
+    font-size: .875rem;
+    color: #374151;
+}
+
+.topbar .user-role {
+    font-size: .75rem;
+    color: #9ca3af;
+}
+
+/* ── Content ── */
+.content-area {
+    padding: 1.5rem;
+}
+
+.welcome-card {
+    background: #4a86b8;
+    color: #fff;
+    border-radius: 14px;
+    padding: 2rem;
+}
+
+.welcome-card h2 {
+    font-weight: 700;
+    margin-bottom: .35rem;
+}
+
+.welcome-card p {
+    opacity: .85;
+    margin: 0;
+}
+
+.placeholder-card {
+    background: #fff;
+    border: 2px dashed #e5e7eb;
+    border-radius: 14px;
+    padding: 3rem 2rem;
+    text-align: center;
+    color: #9ca3af;
+}
+
+.placeholder-card i {
+    font-size: 2.5rem;
+    margin-bottom: .75rem;
+    display: block;
+    color: #d1d5db;
+}
+
+/* ── Overlay ── */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .4);
+    z-index: 1035;
+}
+
+/* ── Responsive ── */
+@media (max-width: 991.98px) {
+    .sidebar {
+        transform: translateX(-100%);
+    }
+
+    .sidebar.show {
+        transform: translateX(0);
+    }
+
+    .sidebar-overlay.show {
+        display: block;
+    }
+
+    .main-content {
+        margin-left: 0;
+    }
+
+    .topbar .btn-toggle {
+        display: block;
+    }
+}
