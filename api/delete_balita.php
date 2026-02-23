@@ -26,13 +26,13 @@ try {
 
     $nik = trim($input['nik']);
 
-    // Mulai transaksi (meskipun DELETE CASCADE di tabel pemeriksaan akan mengurus sisanya)
+    // Mulai transaksi
     $pdo->beginTransaction();
 
     $stmt = $pdo->prepare("DELETE FROM balita WHERE nik = :nik");
     $stmt->execute([':nik' => $nik]);
 
-    // Berapa baris yang dihapus?
+
     $deleted = $stmt->rowCount();
 
     $pdo->commit();

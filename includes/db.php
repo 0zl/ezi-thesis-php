@@ -1,28 +1,31 @@
 <?php
-// includes/db.php
-
-$host = 'localhost';
-$user = 'root';
-$pass = '';
-$dbname = 'posyandu_db';
 
 try {
-    // Connect to MySQL server first to check/create the database
-    $pdo_server = new PDO("mysql:host=$host;charset=utf8mb4", $user, $pass);
-    $pdo_server->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // 1. Coba koneksi langsung ke database (Untuk cPanel / Hosting)
+    try {
+        $pdo = new PDO("mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=utf8mb4", DB_USER, DB_PASS);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    } catch (PDOException $e) {
+        // Jika gagal karena database belum ada (misal di local XAMPP), coba buat databasenya
+        if ($e->getCode() == 1049) { // 1049 is Unknown database
+            $pdo_server = new PDO("mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";charset=utf8mb4", DB_USER, DB_PASS);
+            $pdo_server->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            $pdo_server->exec("CREATE DATABASE IF NOT EXISTS `" . DB_NAME . "` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
+            
+            // Koneksi ulang ke database yang baru dibuat
+            $pdo = new PDO("mysql:host=" . DB_HOST . ";port=" . DB_PORT . ";dbname=" . DB_NAME . ";charset=utf8mb4", DB_USER, DB_PASS);
+            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } else {
+            // Error lain (kredensial salah, host mati, dll)
+            throw $e;
+        }
+    }
 
-    // Create database if it doesn't exist
-    $pdo_server->exec("CREATE DATABASE IF NOT EXISTS `$dbname` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci");
-    
-    // Connect to the specific database
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $user, $pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    // Fetch objects by default can be useful, but let's stick to ASSOC for standard arrays
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 
-    // Auto-create tables if they don't exist
+    // Buat tabel otomatis jika belum ada
     
-    // Table: balita
+    // Tabel: balita
     $sql_balita = "CREATE TABLE IF NOT EXISTS `balita` (
         `nik` VARCHAR(16) PRIMARY KEY,
         `nama` VARCHAR(100) NOT NULL,
@@ -32,7 +35,7 @@ try {
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;";
     $pdo->exec($sql_balita);
 
-    // Table: pemeriksaan
+    // Tabel: pemeriksaan
     $sql_pemeriksaan = "CREATE TABLE IF NOT EXISTS `pemeriksaan` (
         `id` INT AUTO_INCREMENT PRIMARY KEY,
         `balita_nik` VARCHAR(16) NOT NULL,
@@ -52,6 +55,6 @@ try {
     $pdo->exec($sql_pemeriksaan);
 
 } catch (PDOException $e) {
-    // In a real production app, log this error instead of echoing it directly.
+
     die("Database Connection / Setup Failed: " . $e->getMessage());
 }

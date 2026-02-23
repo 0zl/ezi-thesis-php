@@ -37,11 +37,11 @@ try {
     $nama = trim($input['nama']);
     $dob = trim($input['dob']);
     
-    // Map gender to L/P if it comes as full word like Laki-laki
+    // Petakan jenis kelamin ke L/P
     $gender_raw = trim($input['gender']);
     $gender = ($gender_raw === 'Laki-laki' || $gender_raw === 'L') ? 'L' : 'P';
     
-    // Map measure_mode
+    // Petakan mode pengukuran
     $mode_raw = trim($input['measure_mode']);
     $mode = ($mode_raw === 'Berdiri' || $mode_raw === 'standing') ? 'standing' : 'recumbent';
     
@@ -49,8 +49,7 @@ try {
     $height = (float) $input['height'];
     $age_months = (int) $input['age_months'];
 
-    // Get z_scores safely. They come from $lastResult -> z_scores array
-    // z_scores pattern: [{index:"BB/U...", value: X}, ...]
+    // Ambil nilai z_scores
     $z_bb_u = null;
     $z_tb_u = null;
     $z_bb_tb = null;
@@ -69,7 +68,7 @@ try {
 
     $pdo->beginTransaction();
 
-    // 1. Upsert Balita (Insert or Update if NIK already exists)
+    // 1. Simpan atau perbarui data balita berdasarkan NIK
     $stmt_balita = $pdo->prepare("
         INSERT INTO balita (nik, nama, dob, gender) 
         VALUES (:nik, :nama, :dob, :gender)
@@ -86,7 +85,7 @@ try {
         ':gender' => $gender
     ]);
 
-    // 2. Insert Pemeriksaan
+    // 2. Simpan Data Pemeriksaan
     $stmt_pem = $pdo->prepare("
         INSERT INTO pemeriksaan 
         (balita_nik, weight, height, measure_mode, age_months, z_bb_u, z_tb_u, z_bb_tb, fuzzy_score, fuzzy_label, recommendation)

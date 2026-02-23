@@ -2,18 +2,18 @@
 require_once __DIR__ . '/config.php';
 require_auth();
 
-// Pagination setup
+// Pengaturan Paginasi
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
 if ($page < 1) $page = 1;
 
 $limit = 10;
 $offset = ($page - 1) * $limit;
 
-// Search setup
+// Pengaturan Pencarian
 $search = isset($_GET['search']) ? trim($_GET['search']) : '';
 $searchParam = '%' . $search . '%';
 
-// Database query construction
+// Pembuatan Query
 $whereClause = "";
 $params = [];
 
@@ -22,22 +22,22 @@ if ($search !== '') {
     $params[':search'] = $searchParam;
 }
 
-// Get total for pagination
+// Ambil total data untuk paginasi
 $countQuery = "SELECT COUNT(*) FROM balita $whereClause";
 $stmtCount = $pdo->prepare($countQuery);
 $stmtCount->execute($params);
 $totalRecords = $stmtCount->fetchColumn();
 $totalPages = ceil($totalRecords / $limit);
 
-// Get data
+// Ambil data
 $dataQuery = "SELECT * FROM balita $whereClause ORDER BY created_at DESC LIMIT $limit OFFSET $offset";
 $stmtData = $pdo->prepare($dataQuery);
 
-// PDO limit offset must be integers if bound, but we interpolate them safely above.
+
 $stmtData->execute($params);
 $balitaList = $stmtData->fetchAll();
 
-// Build query string for pagination links
+// Fungsi pembantu tautan paginasi
 function getPageUrl($pageNum) {
     global $search;
     $params = ['page' => $pageNum];
@@ -166,7 +166,7 @@ function getPageUrl($pageNum) {
                     </table>
                 </div>
 
-                <!-- Pagination -->
+                <!-- Paginasi -->
                 <?php if ($totalPages > 1): ?>
                     <nav aria-label="Page navigation" class="mt-4">
                         <ul class="pagination justify-content-center mb-0">

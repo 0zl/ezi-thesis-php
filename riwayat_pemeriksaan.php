@@ -8,7 +8,7 @@ if (empty($nik)) {
     die("NIK tidak valid.");
 }
 
-// Fetch Balita
+// Mengambil data Balita
 $stmtBalita = $pdo->prepare("SELECT * FROM balita WHERE nik = :nik");
 $stmtBalita->execute([':nik' => $nik]);
 $balita = $stmtBalita->fetch();
@@ -17,7 +17,7 @@ if (!$balita) {
     die("Data balita tidak ditemukan.");
 }
 
-// Fetch Pemeriksaan History
+// Mengambil riwayat pemeriksaan
 $stmtPem = $pdo->prepare("SELECT * FROM pemeriksaan WHERE balita_nik = :nik ORDER BY created_at DESC");
 $stmtPem->execute([':nik' => $nik]);
 $riwayat = $stmtPem->fetchAll();
