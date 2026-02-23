@@ -1,7 +1,7 @@
 <?php
 define('APP_NAME', 'Posyandu');
 define('APP_VERSION', '1.0.0');
-define('BASE_URL', '/ezi-thesis-php');
+define('BASE_URL', '');
 
 define('DB_HOST', 'localhost');
 define('DB_PORT', '3306');
