@@ -60,13 +60,8 @@ require_auth();
         <nav>
             <div class="nav-label">Menu Utama</div>
             <a href="<?= BASE_URL ?>/dashboard.php" class="nav-link"><i class="bi bi-grid-1x2-fill"></i> Dashboard</a>
-            <a href="#" class="nav-link"><i class="bi bi-people-fill"></i> Data Balita</a>
-            <a href="#" class="nav-link"><i class="bi bi-person-hearts"></i> Data Ibu Hamil</a>
+            <a href="<?= BASE_URL ?>/data_balita.php" class="nav-link"><i class="bi bi-people-fill"></i> Data Balita</a>
             <a href="<?= BASE_URL ?>/pemeriksaan.php" class="nav-link active"><i class="bi bi-clipboard2-pulse-fill"></i> Pemeriksaan</a>
-            <a href="#" class="nav-link"><i class="bi bi-calendar-event-fill"></i> Jadwal Posyandu</a>
-            <div class="nav-label">Lainnya</div>
-            <a href="#" class="nav-link"><i class="bi bi-bar-chart-line-fill"></i> Laporan</a>
-            <a href="#" class="nav-link"><i class="bi bi-gear-fill"></i> Pengaturan</a>
         </nav>
     </aside>
 
@@ -97,6 +92,10 @@ require_auth();
                     <div class="input-card">
                         <h5 class="mb-3"><i class="bi bi-pencil-square text-primary"></i> Input Data Balita</h5>
                         <form id="formAnalyze">
+                            <div class="mb-3">
+                                <label for="nik" class="form-label">NIK Balita (16 digit)</label>
+                                <input type="text" class="form-control" id="nik" name="nik" placeholder="Masukkan 16 digit NIK" pattern="\d{16}" title="Harus 16 digit angka" required>
+                            </div>
                             <div class="mb-3">
                                 <label for="nama" class="form-label">Nama Balita</label>
                                 <input type="text" class="form-control" id="nama" name="nama" placeholder="Masukkan nama lengkap" required>
@@ -149,13 +148,13 @@ require_auth();
                         <hr class="my-3">
                         <p class="text-muted small mb-2"><i class="bi bi-lightbulb"></i> Contoh Kasus (Klik untuk isi otomatis):</p>
                         <div class="d-flex flex-column gap-2">
-                            <button class="btn btn-outline-success btn-sm example-btn" onclick="fillExample('Budi (Sehat)', 'Laki-laki', 12.2, 87.1, 'Berdiri')">
+                            <button type="button" class="btn btn-outline-success btn-sm example-btn" onclick="fillExample('3201010101210001', 'Budi (Sehat)', 'Laki-laki', 12.2, 87.1, 'Berdiri')">
                                 <i class="bi bi-emoji-smile"></i> Budi — Gizi Baik
                             </button>
-                            <button class="btn btn-outline-danger btn-sm example-btn" onclick="fillExample('Asep (Gizi Buruk)', 'Laki-laki', 8.0, 75.0, 'Berdiri')">
+                            <button type="button" class="btn btn-outline-danger btn-sm example-btn" onclick="fillExample('3201010101220002', 'Asep (Gizi Buruk)', 'Laki-laki', 8.0, 75.0, 'Berdiri')">
                                 <i class="bi bi-emoji-frown"></i> Asep — Gizi Buruk
                             </button>
-                            <button class="btn btn-outline-warning btn-sm example-btn" onclick="fillExample('Putri (Gizi Lebih)', 'Perempuan', 18.0, 87.1, 'Berdiri')">
+                            <button type="button" class="btn btn-outline-warning btn-sm example-btn" onclick="fillExample('3201010101230003', 'Putri (Gizi Lebih)', 'Perempuan', 18.0, 87.1, 'Berdiri')">
                                 <i class="bi bi-emoji-neutral"></i> Putri — Gizi Lebih
                             </button>
                         </div>
@@ -229,6 +228,13 @@ require_auth();
                                 <canvas id="growthChart"></canvas>
                             </div>
                         </div>
+
+                        <!-- Tombol Simpan -->
+                        <div class="text-end mt-4">
+                            <button type="button" class="btn btn-success px-4 py-2 fw-bold" data-bs-toggle="modal" data-bs-target="#saveModal">
+                                <i class="bi bi-save"></i> Simpan Hasil Pemeriksaan
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Placeholder (sebelum analisa pertama) -->
@@ -241,6 +247,38 @@ require_auth();
         </div>
     </div>
 
+    <!-- Modal Simpan -->
+    <div class="modal fade" id="saveModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title"><i class="bi bi-floppy me-2"></i> Konfirmasi Simpan Data</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <p>Apakah Anda yakin ingin menyimpan hasil pemeriksaan ini ke database?</p>
+            <ul class="list-group mb-3">
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <strong>NIK:</strong> <span id="modalNik"></span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <strong>Nama:</strong> <span id="modalNama"></span>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <strong>Status Gizi:</strong> <span id="modalStatus" class="fw-bold"></span>
+              </li>
+            </ul>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+            <button type="button" class="btn btn-primary" id="btnConfirmSave">
+                <i class="bi bi-check2"></i> Ya, Simpan
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="<?= BASE_URL ?>/assets/js/dashboard.js"></script>
     <script>
@@ -250,7 +288,8 @@ require_auth();
     let currentChartType = 'tb_u';
 
     // --- Pengisi data contoh ---
-    function fillExample(nama, gender, weight, height, mode) {
+    function fillExample(nik, nama, gender, weight, height, mode) {
+        document.getElementById('nik').value = nik;
         document.getElementById('nama').value = nama;
         // Set Tanggal Lahir ke 2 tahun yang lalu
         const d = new Date();
@@ -334,12 +373,58 @@ require_auth();
         // Tampilkan hasil
         document.getElementById('resultSection').classList.add('show');
 
+        // Update Modal Info
+        document.getElementById('modalNik').textContent = document.getElementById('nik').value;
+        document.getElementById('modalNama').textContent = r.nama;
+        document.getElementById('modalStatus').textContent = r.fuzzy_label;
+
         // Render grafik default
         currentChartType = 'tb_u';
         document.querySelectorAll('.chart-tab-btn').forEach(b => b.classList.remove('active'));
         document.querySelector('.chart-tab-btn').classList.add('active');
         renderChart('tb_u');
     }
+
+    // --- Aksi Simpan Data ---
+    document.getElementById('btnConfirmSave').addEventListener('click', async function() {
+        const btn = this;
+        btn.disabled = true;
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Menyimpan...';
+        
+        const inputData = Object.fromEntries(new FormData(document.getElementById('formAnalyze')).entries());
+        const payload = {
+            ...inputData,
+            ...lastResult
+        };
+
+        try {
+            const resp = await fetch('<?= BASE_URL ?>/api/save_pemeriksaan.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const res = await resp.json();
+            
+            if(!resp.ok || res.error) {
+                throw new Error(res.error || 'Gagal menyimpan data.');
+            }
+            
+            alert('Data pemeriksaan berhasil disimpan!');
+            
+            // Tutup modal
+            const modalEl = document.getElementById('saveModal');
+            const modalInstance = bootstrap.Modal.getInstance(modalEl);
+            if (modalInstance) {
+                modalInstance.hide();
+            }
+        } catch (err) {
+            alert('Error: ' + err.message);
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = originalHtml;
+        }
+    });
 
     // --- Render Grafik ---
     function showChart(type, btn) {

@@ -25,25 +25,11 @@ require_auth();
             <a href="<?= BASE_URL ?>/dashboard.php" class="nav-link active">
                 <i class="bi bi-grid-1x2-fill"></i> Dashboard
             </a>
-            <a href="#" class="nav-link">
+            <a href="<?= BASE_URL ?>/data_balita.php" class="nav-link">
                 <i class="bi bi-people-fill"></i> Data Balita
-            </a>
-            <a href="#" class="nav-link">
-                <i class="bi bi-person-hearts"></i> Data Ibu Hamil
             </a>
             <a href="<?= BASE_URL ?>/pemeriksaan.php" class="nav-link">
                 <i class="bi bi-clipboard2-pulse-fill"></i> Pemeriksaan
-            </a>
-            <a href="#" class="nav-link">
-                <i class="bi bi-calendar-event-fill"></i> Jadwal Posyandu
-            </a>
-
-            <div class="nav-label">Lainnya</div>
-            <a href="#" class="nav-link">
-                <i class="bi bi-bar-chart-line-fill"></i> Laporan
-            </a>
-            <a href="#" class="nav-link">
-                <i class="bi bi-gear-fill"></i> Pengaturan
             </a>
         </nav>
     </aside>
@@ -78,31 +64,17 @@ require_auth();
 
             <div class="row g-4">
                 <div class="col-md-6">
-                    <div class="placeholder-card">
-                        <i class="bi bi-people"></i>
-                        <h5 class="text-muted mb-1">Data Balita</h5>
-                        <p class="small mb-0">Modul ini akan segera tersedia.</p>
+                    <div class="placeholder-card" onclick="window.location.href='<?= BASE_URL ?>/data_balita.php'" style="cursor: pointer;">
+                        <i class="bi bi-people text-primary"></i>
+                        <h5 class="text-dark mb-1">Data Balita</h5>
+                        <p class="small mb-0">Lihat semua data balita terdaftar.</p>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <div class="placeholder-card">
-                        <i class="bi bi-person-hearts"></i>
-                        <h5 class="text-muted mb-1">Data Ibu Hamil</h5>
-                        <p class="small mb-0">Modul ini akan segera tersedia.</p>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="placeholder-card">
-                        <i class="bi bi-clipboard2-pulse"></i>
-                        <h5 class="text-muted mb-1">Pemeriksaan</h5>
-                        <p class="small mb-0">Modul ini akan segera tersedia.</p>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="placeholder-card">
-                        <i class="bi bi-calendar-event"></i>
-                        <h5 class="text-muted mb-1">Jadwal Posyandu</h5>
-                        <p class="small mb-0">Modul ini akan segera tersedia.</p>
+                    <div class="placeholder-card" onclick="window.location.href='<?= BASE_URL ?>/pemeriksaan.php'" style="cursor: pointer;">
+                        <i class="bi bi-clipboard2-pulse text-primary"></i>
+                        <h5 class="text-dark mb-1">Pemeriksaan</h5>
+                        <p class="small mb-0">Lakukan pemeriksaan balita.</p>
                     </div>
                 </div>
             </div>

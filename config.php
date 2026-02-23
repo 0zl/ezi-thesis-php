@@ -12,6 +12,8 @@ if (session_status() === PHP_SESSION_NONE) {
 
 date_default_timezone_set('Asia/Jakarta');
 
+require_once __DIR__ . '/includes/db.php';
+
 function is_authenticated(): bool {
     return isset($_SESSION['authenticated']) && $_SESSION['authenticated'] === true;
 }
